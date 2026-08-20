@@ -1,0 +1,19 @@
+[Unit]
+Description=vela ASGI application server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/app
+ExecStart=/usr/local/bin/vela myproject.asgi:application --workers 4 --unix-socket /run/vela.sock --access-log /var/log/vela/access.log --error-log /var/log/vela/error.log
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=2
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
